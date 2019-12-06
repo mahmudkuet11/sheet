@@ -7,6 +7,7 @@ namespace Mahmud\Sheet;
 
 use Box\Spout\Common\Type;
 use Box\Spout\Reader\Common\Creator\ReaderFactory;
+use Mahmud\Sheet\Middleware\MiddlewareManager;
 
 class SheetReader {
     protected $filePath;
@@ -21,10 +22,16 @@ class SheetReader {
     
     protected $delimiter = null;
     
+    protected $middleware = [];
+    
+    private $middlewareManager;
+    
     public function __construct($filePath, $fileType = Type::XLSX, $delimiter = ',') {
         $this->filePath = $filePath;
         $this->fileType = $fileType;
         $this->delimiter = $delimiter;
+        
+        $this->middlewareManager = new MiddlewareManager();
     }
     
     public static function makeFromXlsx($filePath) {
@@ -79,7 +86,7 @@ class SheetReader {
                 $index = $row_number - 1;
                 if ($this->isIgnored($index)) continue;
                 
-                call_user_func($this->rowCallback, $this->mapData($row->toArray()), $index);
+                call_user_func($this->rowCallback, $this->prepareRow($row->toArray()), $index);
             }
         }
         
@@ -92,7 +99,14 @@ class SheetReader {
         return array_search($index, $this->ignoredRowsIndex) !== false;
     }
     
-    protected function mapData($row) {
+    public function prepareRow($row) {
+        $row = $this->mapDataForColumns($row);
+        $row = $this->middlewareManager->passThrough($this->middleware, $row);
+        
+        return $row;
+    }
+    
+    protected function mapDataForColumns($row) {
         if (count($this->columns) === 0) return $row;
         
         $data = [];
@@ -105,6 +119,16 @@ class SheetReader {
     
     public function onEachRow($callback) {
         $this->rowCallback = $callback;
+        
+        return $this;
+    }
+    
+    public function applyMiddleware($middleware) {
+        if(! is_array($middleware)){
+            $middleware = [$middleware];
+        }
+        
+        $this->middleware += $middleware;
         
         return $this;
     }
