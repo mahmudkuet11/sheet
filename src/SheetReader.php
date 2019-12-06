@@ -86,7 +86,10 @@ class SheetReader {
                 $index = $row_number - 1;
                 if ($this->isIgnored($index)) continue;
                 
-                call_user_func($this->rowCallback, $this->prepareRow($row->toArray()), $index);
+                $row = $this->prepareRow($row->toArray());
+                if($row){
+                    call_user_func($this->rowCallback, $row, $index);
+                }
             }
         }
         

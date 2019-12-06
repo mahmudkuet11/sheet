@@ -52,4 +52,25 @@ class SheetReaderTest extends TestCase {
             'url'  => 'https://mahmud.live'
         ], $data[0]);
     }
+    
+    /**
+     * @test
+     */
+    public function callback_wont_be_called_if_middleware_returns_null() {
+        $data = [];
+        SheetReader::makeFromCsv(__DIR__ . "/dummy/files/test1.csv")
+            ->columns(['id', 'name', 'age'])
+            ->ignoreRow(0)
+            ->applyMiddleware(function ($row) {
+                if($row['id'] == 2){
+                    return null;
+                }
+                return $row;
+            })
+            ->onEachRow(function ($row, $index) use (&$data) {
+                $data[] = $row;
+            })->read();
+    
+        $this->assertEquals(1, count($data));
+    }
 }
