@@ -1,0 +1,13 @@
+{
+    "name": "mahmud/sheet",
+    "description": "Excel and CSV file reader",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mahmudur Rahman",
+            "email": "mahmudkuet11@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
