@@ -10,9 +10,13 @@ class MiddlewareManager {
     public function passThrough(array $middlewares, $row) {
         foreach ($middlewares as $middleware){
             if($middleware instanceof \Closure){
-                $row = $middleware($row);
+                if($row){
+                    $row = $middleware($row);
+                }
             }else{
-                $row = $middleware->handle($row);
+                if($row){
+                    $row = $middleware->handle($row);
+                }
             }
         }
         
