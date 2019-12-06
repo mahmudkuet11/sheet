@@ -2,12 +2,36 @@
     "name": "mahmud/sheet",
     "description": "Excel and CSV file reader",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Mahmudur Rahman",
-            "email": "mahmudkuet11@gmail.com"
+            "email": "mahmudkuet11@gmail.com",
+            "homepage": "https://mahmud.live"
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php": "^7.1.3"
+    },
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Mahmud\\Sheet\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mahmud\\Sheet\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "keywords": ["Excel", "CSV", "Sheet"],
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    }
 }
