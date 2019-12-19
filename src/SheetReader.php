@@ -86,7 +86,7 @@ class SheetReader {
                 $index = $row_number - 1;
                 if ($this->isIgnored($index)) continue;
                 
-                $row = $this->prepareRow($row->toArray());
+                $row = $this->prepareRow($row->toArray(), $index);
                 if($row){
                     call_user_func($this->rowCallback, $row, $index);
                 }
@@ -102,9 +102,9 @@ class SheetReader {
         return array_search($index, $this->ignoredRowsIndex) !== false;
     }
     
-    public function prepareRow($row) {
+    public function prepareRow($row, $index) {
         $row = $this->mapDataForColumns($row);
-        $row = $this->middlewareManager->passThrough($this->middleware, $row);
+        $row = $this->middlewareManager->passThrough($this->middleware, $row, $index);
         
         return $row;
     }
