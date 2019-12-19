@@ -6,6 +6,7 @@
 namespace Mahmud\Sheet\Tests;
 
 use Mahmud\Sheet\SheetReader;
+use Mahmud\Sheet\Tests\dummy\Middleware\IndexCheckMiddleware;
 use PHPUnit\Framework\TestCase;
 
 class SheetReaderTest extends TestCase {
@@ -72,5 +73,62 @@ class SheetReaderTest extends TestCase {
             })->read();
     
         $this->assertEquals(1, count($data));
+    }
+    
+    /**
+     * @test
+     */
+    public function middleware_handler_will_receive_current_index_as_second_argument() {
+        $indexes1 = [];
+        $indexes2 = [];
+        SheetReader::makeFromCsv(__DIR__ . "/dummy/files/test1.csv")
+            ->columns(['id', 'name', 'age'])
+            ->ignoreRow(0)
+            ->applyMiddleware([
+                function ($row, $index) use (&$indexes1) {
+                    if(isset($index)){
+                        $indexes1[] = $index;
+                    }
+                    return $row;
+                },
+                new IndexCheckMiddleware(function($index) use (&$indexes2){
+                    if(isset($index)){
+                        $indexes2[] = $index;
+                    }
+                })
+            ])
+            ->onEachRow(function ($row, $index) use (&$data) {
+                $data[] = $row;
+            })->read();
+        
+        $this->assertTrue(count($indexes1) > 0);
+        $this->assertTrue(count($indexes2) > 0);
+    }
+    
+    /**
+     * @test
+     */
+    public function apply_middleware_can_be_called_multiple_times() {
+        $isChanged = true;
+        SheetReader::makeFromCsv(__DIR__ . "/dummy/files/test1.csv")
+            ->columns(['id', 'name', 'age'])
+            ->ignoreRow(0)
+            ->applyMiddleware(function($row){
+                $row['name'] = "TEST";
+                
+                return $row;
+            })
+            ->applyMiddleware(function($row){
+                $row['age'] = "TEST";
+    
+                return $row;
+            })
+            ->onEachRow(function ($row, $index) use (&$isChanged) {
+                if($row['name'] !== 'TEST' || $row['age'] !== "TEST"){
+                    $isChanged = false;
+                }
+            })->read();
+        
+        $this->assertTrue($isChanged);
     }
 }
