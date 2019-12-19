@@ -130,8 +130,8 @@ class SheetReader {
         if(! is_array($middleware)){
             $middleware = [$middleware];
         }
-        
-        $this->middleware += $middleware;
+    
+        $this->middleware = array_merge($this->middleware, $middleware);
         
         return $this;
     }

@@ -26,7 +26,7 @@ class MiddlewareManagerTest extends TestCase {
         $data = $manager->passThrough([$middleware], [
             'foo' => 'bar',
             'bar' => 'baz'
-        ]);
+        ], 0);
         
         $this->assertEquals([
             'foo' => 'foo1',
@@ -48,7 +48,7 @@ class MiddlewareManagerTest extends TestCase {
         $data = $manager->passThrough([$middleware], [
             'foo' => 'bar',
             'bar' => 'baz'
-        ]);
+        ], 0);
         
         $this->assertEquals([
             'foo' => 'foo1',

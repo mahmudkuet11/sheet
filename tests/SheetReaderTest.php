@@ -104,4 +104,31 @@ class SheetReaderTest extends TestCase {
         $this->assertTrue(count($indexes1) > 0);
         $this->assertTrue(count($indexes2) > 0);
     }
+    
+    /**
+     * @test
+     */
+    public function apply_middleware_can_be_called_multiple_times() {
+        $isChanged = true;
+        SheetReader::makeFromCsv(__DIR__ . "/dummy/files/test1.csv")
+            ->columns(['id', 'name', 'age'])
+            ->ignoreRow(0)
+            ->applyMiddleware(function($row){
+                $row['name'] = "TEST";
+                
+                return $row;
+            })
+            ->applyMiddleware(function($row){
+                $row['age'] = "TEST";
+    
+                return $row;
+            })
+            ->onEachRow(function ($row, $index) use (&$isChanged) {
+                if($row['name'] !== 'TEST' || $row['age'] !== "TEST"){
+                    $isChanged = false;
+                }
+            })->read();
+        
+        $this->assertTrue($isChanged);
+    }
 }
