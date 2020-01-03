@@ -66,7 +66,7 @@ class SheetReader {
     
     public function totalRows() {
         $count = 0;
-        static::make($this->filePath)
+        static::make($this->filePath, $this->fileType)
             ->onEachRow(function () use (&$count) {
                 $count++;
             })
@@ -102,7 +102,7 @@ class SheetReader {
         return array_search($index, $this->ignoredRowsIndex) !== false;
     }
     
-    public function prepareRow($row, $index) {
+    protected function prepareRow($row, $index) {
         $row = $this->mapDataForColumns($row);
         $row = $this->middlewareManager->passThrough($this->middleware, $row, $index);
         

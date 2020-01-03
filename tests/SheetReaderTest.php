@@ -131,4 +131,12 @@ class SheetReaderTest extends TestCase {
         
         $this->assertTrue($isChanged);
     }
+    
+    /**
+     * @test
+     */
+    public function total_rows_can_be_counted() {
+        $count = SheetReader::makeFromCsv(__DIR__ . "/dummy/files/test1.csv")->totalRows();
+        $this->assertEquals(3, $count);
+    }
 }
