@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/mahmudkuet11/sheet.svg?branch=master)](https://travis-ci.org/mahmudkuet11/sheet)
+[![Latest Stable Version](https://poser.pugx.org/mahmud/sheet/v/stable)](https://packagist.org/packages/mahmud/sheet)
+[![License](https://poser.pugx.org/mahmud/sheet/license)](https://packagist.org/packages/mahmud/sheet)
+[![composer.lock](https://poser.pugx.org/mahmud/sheet/composerlock)](https://packagist.org/packages/mahmud/sheet)
+
 A clean and beautiful API to read Excel/CSV sheet. This is a wrapper around [box/spout](https://github.com/box/spout) package.
 
 # Installation
@@ -95,7 +100,7 @@ SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
             })->read();
 ```
 
-If you return null from middleware, That row will be skipped and won't pass to `onEachRow` handler.
+If you return `null` from middleware, That row will be skipped and won't pass to `onEachRow` handler.
 
 ```php
 SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
