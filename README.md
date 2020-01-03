@@ -34,6 +34,7 @@ Let's assume we have a csv file like this.
 use Mahmud\Sheet\SheetReader;
 
 SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
+            ->delimiter(",")                        // Optional: You can set delimiter for CSV file
             ->ignoreRow(0)                          // Optional: Skip the header row
             ->columns(['id', 'name', 'age'])        // Arbitary column name that will be mapped sequentially for each row
             ->onEachRow(function($row, $index){
@@ -51,6 +52,7 @@ You can modify data of each row with middleware. See the following example
 use Mahmud\Sheet\SheetReader;
 
 SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
+            ->delimiter(",")
             ->ignoreRow(0)
             ->columns(['id', 'name', 'age'])
             ->applyMiddleware(function($row, $index){
@@ -76,6 +78,7 @@ class AgeMiddleware{
 }
 
 SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
+            ->delimiter(",")
             ->ignoreRow(0)
             ->columns(['id', 'name', 'age'])
             ->applyMiddleware(new AgeMiddleware)
@@ -89,6 +92,7 @@ Also you can pass array of middlewares
 
 ```php
 SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
+            ->delimiter(",")
             ->ignoreRow(0)
             ->columns(['id', 'name', 'age'])
             ->applyMiddleware([
@@ -104,6 +108,7 @@ If you return `null` from middleware, That row will be skipped and won't pass to
 
 ```php
 SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
+            ->delimiter(",")
             ->ignoreRow(0)
             ->columns(['id', 'name', 'age'])
             ->applyMiddleware(function($row){
