@@ -123,3 +123,11 @@ SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
             })->read();
 ```
 
+## Count total rows
+
+```php
+$total = SheetReader::makeFromCsv('/path-to-csv-file/example-file.csv')
+                        ->totalRows();
+                        
+var_dump($total);       // 4
+```
